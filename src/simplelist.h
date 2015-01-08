@@ -2,23 +2,51 @@
 #define simplelist_h 
 #define NULL 0 
 template<typename T> 
-class SimpleNode
-{
-	public:
-		T data ; 
-		SimpleNode<T>* next ; 
-		SimpleNode(T dat, SimpleNode<T>* ne) : data(dat), next(ne) {}    
-} ; 
-
-template<typename T> 
 class SimpleList
 {
 	private:
+		template<typename Q> 
+		class SimpleNode
+		{
+			public:
+				Q data ; 
+				SimpleNode<Q>* next ; 
+				SimpleNode(Q dat, SimpleNode<Q>* ne) : data(dat), next(ne) {}    
+		} ;   
 		int size ; 
 		SimpleNode<T>* start ; 
 	public:
+		class iterator
+		{
+			private:
+				SimpleNode<T>* curr ; 
+				int index ; 
+				SimpleList<T>* slp ; 
+			public:
+				iterator(SimpleNode<T>* init, SimpleList<T>* sls):curr(init), slp(sls), index(0) { }
+				void operator ++(int ind)
+				{
+					if(index > slp->size-1)
+					{
+						// throw some exception. 
+					}
+					else
+					{
+						curr = curr->next ; 
+						index++ ; 
+					}
+				}
+				T operator *()
+				{
+					return curr->data ; 
+				}
+		} ; 
 		SimpleList():start(NULL),size(0) { }  
 		// default pushes to the top. 
+		iterator begin()
+		{
+			return iterator(start, this) ; 
+		}
 		void push_back(T ele) 
 		{
 			SimpleNode<T>* curr = new SimpleNode<T>(ele, start) ; 
