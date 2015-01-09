@@ -1,18 +1,22 @@
-#ifndef simplelist_h
-#define simplelist_h 
+/*  
+ *  TODO :- Make the class thread safe. 
+ *  TODO :- Compatibility issue with STL library. 
+ *  TODO :- Implement a common iterator for classes.*/
+#ifndef SIMPLELIST_H 
+#define SIMPLELIST_H 
 #define NULL 0 
 template<typename T> 
 class SimpleList
 {
 	private:
 		template<typename Q> 
-		class SimpleNode
-		{
-			public:
-				Q data ; 
-				SimpleNode<Q>* next ; 
-				SimpleNode(Q dat, SimpleNode<Q>* ne) : data(dat), next(ne) {}    
-		} ;   
+			class SimpleNode
+			{
+				public:
+					Q data ; 
+					SimpleNode<Q>* next ; 
+					SimpleNode(Q dat, SimpleNode<Q>* ne) : data(dat), next(ne) {}    
+			} ;   
 		int size ; 
 		SimpleNode<T>* start ; 
 	public:
@@ -23,12 +27,27 @@ class SimpleList
 				int index ; 
 				SimpleList<T>* slp ; 
 			public:
-				iterator(SimpleNode<T>* init, SimpleList<T>* sls):curr(init), slp(sls), index(0) { }
+				iterator(SimpleNode<T>* init, SimpleList<T>* sls):curr(init), slp(sls), index(0) {}
+				iterator (SimpleNode<T>* init, SimpleList<T>* sls, int ind):curr(init), slp(sls),index(ind) { }  
+				void operator ++()
+				{
+					if(index >= slp->size-1)
+					{
+						index = -1 ; 
+						curr = NULL ; 
+					}
+					else
+					{
+						curr = curr->next ; 
+						index++ ; 
+					}
+				}
 				void operator ++(int ind)
 				{
-					if(index > slp->size-1)
+					if(index >= slp->size-1)
 					{
-						// throw some exception. 
+							index = -1 ; 
+							curr = NULL ; 
 					}
 					else
 					{
@@ -40,12 +59,30 @@ class SimpleList
 				{
 					return curr->data ; 
 				}
+				bool operator  == (iterator it2)
+				{
+					if(index != it2.index)
+						return false ; 
+					if(slp != it2.slp) 
+						return false ; 
+					if(curr != it2.curr)
+						return false ; 
+					return true ; 
+				}
+				bool operator != (iterator it2)
+				{
+					return !(*this == it2) ; 
+				}
 		} ; 
 		SimpleList():start(NULL),size(0) { }  
 		// default pushes to the top. 
 		iterator begin()
 		{
 			return iterator(start, this) ; 
+		}
+		iterator end()
+		{
+			return iterator(NULL, this,-1) ; 
 		}
 		void push_back(T ele) 
 		{
@@ -66,7 +103,12 @@ class SimpleList
 				}
 				SimpleNode<T>* temp = new SimpleNode<T>(ele, NULL) ; 
 				curr->next = temp; 
+				size++ ; 
 			}
+		}
+		int getSize()
+		{
+			return size ; 
 		}
 		void del() 
 		{
