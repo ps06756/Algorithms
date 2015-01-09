@@ -71,6 +71,17 @@ class Heap
 		}
 	}
 	public: 
+	T operator [](int pos)
+	{
+		if((pos < nodes.size()) &&(pos >= 0))
+		{
+			return nodes[pos] ; 
+		}
+		else
+		{
+			// throw some exception. 
+		}
+	}
 	class iterator
 	{
 		private:
@@ -139,6 +150,10 @@ class Heap
 	iterator end()
 	{
 		return iterator(-1, this) ; 
+	}
+	int getSize()
+	{
+		return nodes.size() ; 
 	}
 
 } ; 

@@ -24,9 +24,15 @@ int main()
 	h.push_back(5) ; 
 	h.push_back(20) ; 
 	h.push_back(30) ; 
+	cout<<"Using iterators..\n" ; 
 	for(Heap<int>::iterator it = h.begin(); it != h.end(); it++)
 	{
 		cout<<*it<<" "  ; 
+	}
+	cout<<"\nUsing operators\n" ; 
+	for(int i=0; i<h.getSize(); i++)
+	{
+		cout<<h[i]<<" " ; 
 	}
 	cout<<"\n" ; 
 	return  0 ; 
