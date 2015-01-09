@@ -5,6 +5,7 @@
 #ifndef SIMPLELIST_H 
 #define SIMPLELIST_H 
 #define NULL 0 
+#include <cstdio> 
 template<typename T> 
 class SimpleList
 {
@@ -19,6 +20,33 @@ class SimpleList
 			} ;   
 		int size ; 
 		SimpleNode<T>* start ; 
+		class lock
+		{
+			public:
+				lock():flag(false) { } 
+				bool flag  ;
+				bool acquire()
+				{
+					if(flag == true) // already aquired.
+					{
+						while(true)
+						{
+							if(flag == false)
+								break ; 
+						}
+						flag = false ; 
+					}
+					else if(flag == false)
+					{
+						flag = true ; // lock acquired...
+					}
+				}
+				bool release()
+				{
+					flag = false; 
+				}
+		} ; 
+		lock spinlock ; 
 	public:
 		class iterator
 		{
@@ -86,12 +114,15 @@ class SimpleList
 		}
 		void push_back(T ele) 
 		{
+			spinlock.acquire() ; 
 			SimpleNode<T>* curr = new SimpleNode<T>(ele, start) ; 
 			start = curr ; 
 			size++ ; 
+			spinlock.release() ; 
 		}
 		void push_back(T ele , bool top) 
 		{
+			spinlock.aquire() ; 
 			if(top == true)
 				push_back(ele) ; 
 			else
@@ -105,13 +136,15 @@ class SimpleList
 				curr->next = temp; 
 				size++ ; 
 			}
+			spinlock.release() ; 
 		}
-		int getSize()
+		int getSize()  
 		{
 			return size ; 
 		}
 		void del() 
 		{
+			spinlock.acquire() ; 
 			if(start == NULL)
 			{
 				// throw some exception here.
@@ -123,9 +156,11 @@ class SimpleList
 				delete curr ; 
 				size-- ; 
 			}
+			spinlock.release() ; 
 		}
 		void del(int pos)  
 		{
+			spinlock.acquire() ; 
 			SimpleNode<T>* curr = start ; 
 			int i = 0 ; 
 			if(pos >size-1)
@@ -144,6 +179,7 @@ class SimpleList
 				delete curr ; 
 				size-- ; 
 			}
+			spinlock.release() ; 
 		}
 
 		T operator [] (int index) const 
