@@ -40,10 +40,12 @@ class SimpleList
 					{
 						flag = true ; // lock acquired...
 					}
+					return flag ; 
 				}
 				bool release()
 				{
-					flag = false; 
+					flag = false;
+					return !flag ; 
 				}
 		} ; 
 		lock spinlock ; 

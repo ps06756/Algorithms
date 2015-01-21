@@ -1,19 +1,97 @@
+#include <vector> 
 using namespace std ; 
-template <typename T> 
-class Node
-{
-	public: 
-		T key ; 
-		Node<T>* left ; 
-		Node<T>* right ; 
-		Node<T>* parent ; 
-} ; 
 template<typename T> 
 class BST 
 {
+	private:
+		template<typename Q> 
+			class Node
+			{
+				public: 
+					Q key ; 
+					Node<Q>* left ; 
+					Node<Q>* right ; 
+					Node<Q>* parent ; 
+			} ; 
+
 	public:
+		class Iterator
+		{
+			public: 
+				Node<T>* curr ; 
+				typedef typename vector<T>::iterator vit ; 
+				vit it ; 
+				vector<T> order ; 
+				void fill_me(Node<T>* r)
+				{
+					if(r->left != nullptr)
+						fill_me(r->left) ; 
+					order.push_back(r->key) ; 
+					if(r->right != nullptr)
+						fill_me(r->right) ; 
+				}
+				T operator *()
+				{
+					return (*it) ; 
+				}
+				void operator ++(int)
+				{
+					if(it - order.begin() == (int)order.size()-1)
+						curr = nullptr ; 
+					else
+						it++ ; 
+				}
+				void operator --(int)
+				{
+					it-- ; 
+				}
+				Iterator(Node<T>* r)
+				{
+					curr = r ; 
+					Node<T>* x = r ; 
+					if(x != nullptr)
+					{
+						if(x->left != nullptr)
+							fill_me(x->left) ; 
+						order.push_back(x->key) ; 
+						if(x->right != nullptr)
+							fill_me(x->right) ; 
+						it = order.begin() ; 
+					}
+					else
+					{
+						it = order.begin() ; 
+					}
+				}
+				bool operator == (Iterator it2)
+				{
+					if(curr == it2.curr) return true ; return false ; 
+				}
+				bool operator != (Iterator it2)
+				{
+					return !(this->operator==(it2)) ; 
+				}
+				void operator ++()
+				{
+					this->operator++(1) ; 
+				}
+				void operator --()
+				{
+					this->operator--(1) ; 
+				}
+		} ; 
 		Node<T>* root ;
 		int sizei = 0;  
+		Iterator begin()
+		{
+			Iterator it(root) ; 
+			return it ; 
+		}
+		Iterator end()
+		{
+			Iterator it(nullptr) ; 
+			return it ; 
+		}
 		BST()
 		{
 			root = nullptr ; 
@@ -26,7 +104,9 @@ class BST
 			}
 		}
 		int size()
+		{
 			return sizei ; 
+		}
 		void del(Node<T>* nod)
 		{
 			if(nod == nullptr)
