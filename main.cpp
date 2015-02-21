@@ -16,6 +16,8 @@ void testBst()
 	bs.insert(7) ; 
 	bs.insert(5) ; 
 	std::for_each(bs.begin(), bs.end(), [](int n) { cout<<"val = "<<n<<"\n"; }) ; 
+	std::for_each(bs.pbegin(), bs.pend(), [](int n) { cout<<"val = "<<n<<"\n"; }) ; 
+	std::for_each(bs.pobegin(), bs.poend(), [](int n) { cout<<"val = "<<n<<"\n"; }) ; 
 }
 int main()
 {

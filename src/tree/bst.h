@@ -2,6 +2,21 @@
 Description :- Implementation of the binary search tree as mentioned in Introduction to algorithms by Cormen. The implementation is more or less C++ STL compatible and provides iterators as an interface to accessing the elements. 
 Made by :- Pratik Singhal (ps06756) 
 */ 
+/*  
+ * Implementation description :- 
+ * A binary search tree is a binary tree with the additional restriction that it needs to follow the search tree property.
+ * This property is what makes the binary search tree useful than plain binary tree. The search property is as follow :- 
+ * 1) The value of left child of the parent must be less than or equal to the parents value and the value of right child of the parent must be greater than that of parent. 
+ * As mentioned in Introduction to algorithms A Binary search tree must support these operations :- 
+ * 1) Insertion 
+ * 2) Deletion 
+ * 3) Transplant
+ * 4) Inorder Traversal
+ * 5) Pre order Traversal
+ * 6) Post order traversal 
+ *
+ * All these operations ar implemented in this file and we also provide the iterators which to do so. 
+ * We also provide iterators for in order, post order and pre order traversals of the tree. */
 #include <vector> 
 using namespace std ; 
 template<typename T> 
@@ -26,13 +41,29 @@ class BST
 				typedef typename vector<T>::iterator vit ; 
 				vit it ; 
 				vector<T> order ; 
-				void fill_me(Node<T>* r)
+				void fill_me(Node<T>* r) // by default inorder traversal. 
 				{
 					if(r->left != nullptr)
 						fill_me(r->left) ; 
 					order.push_back(r->key) ; 
 					if(r->right != nullptr)
 						fill_me(r->right) ; 
+				}
+				void fill_me_pre_order(Node<T>* r)
+				{
+					order.push_back(r->key) ; 
+					if(r->left != nullptr)
+						fill_me_pre_order(r->left) ; 
+					if(r->right != nullptr)
+						fill_me_pre_order(r->right) ; 
+				}
+				void fill_me_post_order(Node<T>* r)
+				{
+					if(r->left != nullptr)
+						fill_me_post_order(r->left) ; 
+					if(r->right != nullptr)
+						fill_me_post_order(r->right) ; 
+					order.push_back(r->key) ; 
 				}
 				T operator *()
 				{
@@ -49,17 +80,36 @@ class BST
 				{
 					it-- ; 
 				}
-				Iterator(Node<T>* r)
+				Iterator(Node<T>* r, int state) // 0 for inorder, 1 for preorder and 2 for post order.
 				{
 					curr = r ; 
 					Node<T>* x = r ; 
 					if(x != nullptr)
 					{
-						if(x->left != nullptr)
-							fill_me(x->left) ; 
-						order.push_back(x->key) ; 
-						if(x->right != nullptr)
-							fill_me(x->right) ; 
+						if(state == 0)
+						{
+							if(x->left != nullptr)
+								fill_me(x->left) ; 
+							order.push_back(x->key) ; 
+							if(x->right != nullptr)
+								fill_me(x->right) ; 
+						}
+						else if(state == 1)
+						{
+							order.push_back(x->key) ; 
+							if(x->left != nullptr)
+								fill_me_pre_order(x->left) ; 
+							if(x->right != nullptr)
+								fill_me_pre_order(x->right) ; 
+						}
+						else if(state == 2)
+						{
+							if(x->left != nullptr)
+								fill_me_post_order(x->left) ; 
+							if(x->right != nullptr)
+								fill_me_post_order(x->right) ; 
+							order.push_back(x->key) ; 
+						}
 						it = order.begin() ; 
 					}
 					else
@@ -86,14 +136,34 @@ class BST
 		} ; 
 		Node<T>* root ;
 		int sizei = 0;  
-		Iterator begin()
+		Iterator begin() // inorder traversal. 
 		{
-			Iterator it(root) ; 
+			Iterator it(root,0) ; 
 			return it ; 
 		}
 		Iterator end()
 		{
-			Iterator it(nullptr) ; 
+			Iterator it(nullptr,0) ; 
+			return it ; 
+		}
+		Iterator pbegin() // preorder traversal. 
+		{
+			Iterator it(root,1) ; 
+			return it ; 
+		}
+		Iterator pend() 
+		{
+			Iterator it(nullptr, 1) ; 
+			return it ;
+		}
+		Iterator pobegin() // post-order traversal. 
+		{
+			Iterator it(root,2) ; 
+			return it ; 
+		}
+		Iterator poend()
+		{
+			Iterator it(nullptr,2) ; 
 			return it ; 
 		}
 		BST()
