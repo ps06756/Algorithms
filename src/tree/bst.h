@@ -1,7 +1,11 @@
+/*
+Description :- Implementation of the binary search tree as mentioned in Introduction to algorithms by Cormen. The implementation is more or less C++ STL compatible and provides iterators as an interface to accessing the elements. 
+Made by :- Pratik Singhal (ps06756) 
+*/ 
 #include <vector> 
 using namespace std ; 
 template<typename T> 
-class BST 
+class BST  
 {
 	private:
 		template<typename Q> 
@@ -15,7 +19,7 @@ class BST
 			} ; 
 
 	public:
-		class Iterator
+		class Iterator // iterator for iterating through the tree. 
 		{
 			public: 
 				Node<T>* curr ; 
@@ -128,7 +132,7 @@ class BST
 			delete nod ; 
 			sizei-- ; 
 		}
-		Node<T>* treeMin(Node<T>* start)
+		Node<T>* treeMin(Node<T>* start) // getMin element from the tree. 
 		{
 			Node<T>* y=start,*x = start ; 
 			if(x == nullptr) return nullptr ; 
@@ -139,7 +143,7 @@ class BST
 			}
 			return y ; 
 		}
-		void inserts(Node<T>* n)
+		void insert(Node<T>* n) // inserts into the binary search tree. 
 		{
 			Node<T> *y = nullptr,*x = root ; 
 			while(x != nullptr)
@@ -185,7 +189,7 @@ class BST
 			delete val ; 
 			sizei-- ; 
 		}
-		void transplant(Node<T>* u, Node<T>* v)
+		void transplant(Node<T>* u, Node<T>* v) // performs the transplant operation on the binary search tree.as mentioned in Cormen CLRS Text book . 
 		{
 			if(u->parent == nullptr)
 			{
@@ -221,8 +225,6 @@ class BST
 		void insert(T val)
 		{
 			Node<T>* n = new Node<T> ; n->key = val ; n->left = nullptr ; n->right = nullptr ; n->parent = nullptr ; 
-			inserts(n) ; 
+			insert(n) ; 
 		}
 } ; 
-
-
