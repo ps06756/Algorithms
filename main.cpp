@@ -1,5 +1,5 @@
 #include <tree/bst.h> 
-#include <tree/bt.h> 
+#include <tree/tree.h> 
 #include <iostream> 
 #include <algorithm> 
 #include <functional> 
@@ -23,15 +23,21 @@ void testBst()
 	std::for_each(bs.pobegin(), bs.poend(), [](int n) { cout<<"val = "<<n<<"\n"; }) ; 
 	cout<<"\n" ; 
 }
-void testBt()
+void testTree()
 {
-	BT<int> bt ; 
+	Tree<int> tree ; 
 	cout<<"Inserting elements in BTree\n" ; 
+	tree.insert(10) ; tree.insert(20,true) ; tree.insert(30,true) ; 
+	tree.insert(40,true) ; tree.insert(50) ; 
+	for(Tree<int>::iterator it = tree.begin(); it != tree.end(); it++)
+	{
+		cout<<*it<<"\n" ; 
+	}
 }
 int main()
 {
 	testBst() ; 
-	testBt() ; 
+	testTree() ; 
 	cout<<"\n" ; 
 	return  0 ; 
 }
