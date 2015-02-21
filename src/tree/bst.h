@@ -34,13 +34,19 @@ class BST
 			} ; 
 
 	public:
-		class Iterator // iterator for iterating through the tree. 
+		class iterator // iterator for iterating through the tree. 
 		{
 			public: 
 				Node<T>* curr ; 
 				typedef typename vector<T>::iterator vit ; 
 				vit it ; 
 				vector<T> order ; 
+				iterator(iterator* ptr)
+				{
+					this->curr = ptr->curr ; 
+					this->it = ptr->it ; 
+					this->order = ptr->order ; 
+				}
 				void fill_me(Node<T>* r) // by default inorder traversal. 
 				{
 					if(r->left != nullptr)
@@ -69,18 +75,20 @@ class BST
 				{
 					return (*it) ; 
 				}
-				void operator ++(int)
+				iterator operator ++(int)
 				{
+					iterator temp(this) ; 
 					if(it - order.begin() == (int)order.size()-1)
 						curr = nullptr ; 
 					else
 						it++ ; 
+					return temp ; 
 				}
 				void operator --(int)
 				{
 					it-- ; 
 				}
-				Iterator(Node<T>* r, int state) // 0 for inorder, 1 for preorder and 2 for post order.
+				iterator(Node<T>* r, int state) // 0 for inorder, 1 for preorder and 2 for post order.
 				{
 					curr = r ; 
 					Node<T>* x = r ; 
@@ -117,17 +125,18 @@ class BST
 						it = order.begin() ; 
 					}
 				}
-				bool operator == (Iterator it2)
+				bool operator == (iterator it2)
 				{
 					if(curr == it2.curr) return true ; return false ; 
 				}
-				bool operator != (Iterator it2)
+				bool operator != (iterator it2)
 				{
 					return !(this->operator==(it2)) ; 
 				}
-				void operator ++()
+				iterator& operator ++()
 				{
 					this->operator++(1) ; 
+					return (*this) ; 
 				}
 				void operator --()
 				{
@@ -136,34 +145,34 @@ class BST
 		} ; 
 		Node<T>* root ;
 		int sizei = 0;  
-		Iterator begin() // inorder traversal. 
+		iterator begin() // inorder traversal. 
 		{
-			Iterator it(root,0) ; 
+			iterator it(root,0) ; 
 			return it ; 
 		}
-		Iterator end()
+		iterator end()
 		{
-			Iterator it(nullptr,0) ; 
+			iterator it(nullptr,0) ; 
 			return it ; 
 		}
-		Iterator pbegin() // preorder traversal. 
+		iterator pbegin() // preorder traversal. 
 		{
-			Iterator it(root,1) ; 
+			iterator it(root,1) ; 
 			return it ; 
 		}
-		Iterator pend() 
+		iterator pend() 
 		{
-			Iterator it(nullptr, 1) ; 
+			iterator it(nullptr, 1) ; 
 			return it ;
 		}
-		Iterator pobegin() // post-order traversal. 
+		iterator pobegin() // post-order traversal. 
 		{
-			Iterator it(root,2) ; 
+			iterator it(root,2) ; 
 			return it ; 
 		}
-		Iterator poend()
+		iterator poend()
 		{
-			Iterator it(nullptr,2) ; 
+			iterator it(nullptr,2) ; 
 			return it ; 
 		}
 		BST()

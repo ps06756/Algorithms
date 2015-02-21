@@ -56,6 +56,11 @@ class Tree
 			{
 				return (*lt) ; 	
 			}
+			iterator& operator ++()
+			{
+				this->operator++(1) ; 
+				return (*this) ; 
+			}
 			iterator operator ++(int)
 			{
 				iterator temp(this) ; 
