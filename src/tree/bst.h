@@ -1,3 +1,5 @@
+#ifndef BST_H
+#define BST_H
 /*
 Description :- Implementation of the binary search tree as mentioned in Introduction to algorithms by Cormen. The implementation is more or less C++ STL compatible and provides iterators as an interface to accessing the elements. 
 Made by :- Pratik Singhal (ps06756) 
@@ -307,3 +309,4 @@ class BST
 			insert(n) ; 
 		}
 } ; 
+#endif 

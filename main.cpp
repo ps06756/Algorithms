@@ -1,3 +1,4 @@
+#include <trie/trie.h> 
 #include <tree/bst.h> 
 #include <tree/tree.h> 
 #include <iostream> 
@@ -31,10 +32,17 @@ void testTree()
 	tree.insert(40,true) ; tree.insert(50) ; tree.insert(60) ; 
 	for_each(tree.begin(), tree.end(), [](int n) { cout<<"val = "<<n<<"\n" ;}) ; 
 }
+void testTrie()
+{
+	Trie trie ; 
+	trie.addWord("tree") ; trie.addWord("trie") ; trie.addWord("algo") ; trie.addWord("assoc") ; trie.addWord("all") ; trie.addWord("also")  ;
+	trie.print() ; 
+}
 int main()
 {
-	testBst() ; 
+	//testBst() ; 
 	//testTree() ; 
+	testTrie() ; 
 	cout<<"\n" ; 
 	return  0 ; 
 }

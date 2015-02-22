@@ -1,12 +1,26 @@
+#ifndef TREE_H
+#define TREE_H
+/* 
+ * This file implements the simple tree data structure to be used in other applications. 
+ * The interface of the tree data structure is not complete as such but will be completed as soon as we find other methods to add
+ * to the class, as we code other data structure. 
+ * Compile with :- std=c++1y or std=c++0x 
+ * */
 #include <vector> 
 #include <list> 
+#include <iostream> 
 using namespace std ; 
 template<typename T> 
 class Tree
 {
 	private: 
 		vector<list<T> > levels ; 
+		//typedef typename Tree<T>::iterator tit ; // to be declared after the declaration of the class iterator.
 	public: 
+		int totalLevels()
+		{
+			return levels.size() ; 
+		}
 		class iterator
 		{
 			typedef typename  vector<list<T> >::iterator vit ; 
@@ -16,13 +30,17 @@ class Tree
 			bool rev ; 
 			Tree<T>* tree ; // reference to the outer class.
 			public:
-//TODO:- Add code to handle the reverse iterators as well. 
+			//TODO:- Add code to handle the reverse iterators as well. 
 			iterator(iterator* cop)
 			{
 				this->it = cop->it ; 
 				this->lt = cop->lt; 
 				this->rev = cop->rev ; 
 				this->tree = cop->tree ; 
+			}
+			iterator()
+			{
+				tree = nullptr ; 
 			}
 			iterator(Tree* tr, bool reverse=false,bool en=false)
 			{
@@ -73,6 +91,7 @@ class Tree
 						it++ ; 
 						if(it != tree->levels.end())
 							lt = (*it).begin() ; 
+						cout<<"\n" ; 
 					}
 				}
 				return temp ; 
@@ -100,6 +119,21 @@ class Tree
 				}
 			}
 		}
+		void insert(T ele, int level) // insertes ele at the level level. 
+		{
+			if((level < 0)||(level > (int)levels.size()))
+			{
+				cout<<"Incorrect level information supplied. level = "<<level<<"\n"; 
+			}
+			else if(level == (int)levels.size())
+			{
+				insert(ele, true) ;
+			}
+			else
+			{
+				levels[level].push_back(ele) ;	
+			}
+		}
 		iterator begin()
 		{
 			iterator it(this) ; 
@@ -110,4 +144,33 @@ class Tree
 			iterator it(this,false,true) ; 
 			return it ; 
 		}
+	private:
+		typedef typename list<T>::iterator tit ; 
+	public: 
+		tit getLevel(int level)
+		{
+			if((level < 0)||(level >= (int)levels.size()))
+			{
+				cout<<"Incorrect arguements supplied to getLevel("<<level<<")\n" ; 
+				return getEndLevel(level) ; 
+			}
+			else
+			{
+				return levels[level].begin() ; 
+			}
+		}
+		tit getEndLevel(int level)
+		{
+			if((level < 0)&&(level >= (int)levels.size()))
+			{
+				cout<<"Incorrect arguments supplied to getEndLevel("<<level<<")\n" ; 
+				list<T> dummy ; return dummy.end() ; 	
+			}
+			else
+			{
+				return levels[level].end() ; 
+			}
+		}
+
 } ; 
+#endif 
