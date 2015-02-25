@@ -1,3 +1,4 @@
+#include <suffix/sarray.h> 
 #include <trie/trie.h> 
 #include <tree/bst.h> 
 #include <tree/tree.h> 
@@ -38,11 +39,18 @@ void testTrie()
 	trie.addWord("tree") ; trie.addWord("trie") ; trie.addWord("algo") ; trie.addWord("assoc") ; trie.addWord("all") ; trie.addWord("also")  ;
 	trie.print() ; 
 }
+void testSuffix()
+{
+	SuffixArray arr("banana") ; 
+	arr.printArray() ; 
+}
 int main()
 {
 	//testBst() ; 
 	//testTree() ; 
-	testTrie() ; 
+	//testTrie() ; 
+	cout<<"Testing suffix array\n" ; 
+	testSuffix() ; 
 	cout<<"\n" ; 
 	return  0 ; 
 }
